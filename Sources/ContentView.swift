@@ -25,16 +25,25 @@ struct ContentView: View {
             
             Divider()
             
-            HStack {
-                Button("Select Folder to Process") {
-                    selectFolder()
-                }
-                .disabled(isProcessing || targetModel.isEmpty)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("Fallback / Manual Mode:")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                Text("Use this if you don't want to use the Finder right-click menu.")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
                 
-                Spacer()
-                
-                Button("Quit") {
-                    NSApplication.shared.terminate(nil)
+                HStack {
+                    Button("Browse For Folder Manually...") {
+                        selectFolder()
+                    }
+                    .disabled(isProcessing || targetModel.isEmpty)
+                    
+                    Spacer()
+                    
+                    Button("Quit") {
+                        NSApplication.shared.terminate(nil)
+                    }
                 }
             }
             

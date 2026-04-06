@@ -15,7 +15,7 @@ targets:
         LSUIElement: true
         NSServices:
           - NSMenuItem:
-              default: Adjust RAWs EXIF
+              default: "📷 ExifButcher: Adjust RAWs EXIF"
             NSMessage: processFolder
             NSPortName: ExifButcher
             NSRequiredContext:
