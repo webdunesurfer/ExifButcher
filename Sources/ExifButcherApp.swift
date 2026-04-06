@@ -26,13 +26,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func processFolder(_ pboard: NSPasteboard, userData: String, error: AutoreleasingUnsafeMutablePointer<NSString>) {
+        NSLog("ExifButcher: processFolder Service Triggered!")
+        
         guard let types = pboard.types, types.contains(.fileURL),
               let urls = pboard.readObjects(forClasses: [NSURL.self], options: nil) as? [URL] else {
+            NSLog("ExifButcher: No valid file URLs found on Pasteboard.")
             return
         }
         
         let targetModel = UserDefaults.standard.string(forKey: "TargetCameraModel") ?? ""
         let originalModel = UserDefaults.standard.string(forKey: "OriginalCameraModel") ?? ""
+        
+        NSLog("ExifButcher: Received \(urls.count) URLs. Target Model: '\(targetModel)'")
         
         let runner = ExifToolRunner()
         
