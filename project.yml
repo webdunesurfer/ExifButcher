@@ -16,7 +16,9 @@ targets:
               default: Adjust RAWs EXIF
             NSMessage: processFolder
             NSPortName: ExifButcher
-            NSSendTypes:
+            NSRequiredContext:
+              NSServiceCategory: public.item
+            NSSendFileTypes:
               - public.item
               - public.folder
               - public.directory
