@@ -1,0 +1,39 @@
+name: Build and Release
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Homebrew
+      uses: Homebrew/actions/setup-homebrew@master
+
+    - name: Install xcodegen
+      run: brew install xcodegen
+
+    - name: Generate Xcode Project
+      run: xcodegen generate
+
+    - name: Build with xcodebuild
+      run: xcodebuild -project ExifButcher.xcodeproj -scheme ExifButcher -configuration Release build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
+
+    - name: Archive ExifButcher app
+      run: |
+        mkdir -p Payload
+        cp -r build/Release/ExifButcher.app Payload/
+        zip -r ExifButcher.zip Payload
+        
+    - name: Upload Build Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ExifButcher-App
+        path: ExifButcher.zip
