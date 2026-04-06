@@ -28,8 +28,6 @@ targets:
         CFBundleShortVersionString: "1.0"
         CFBundlePackageType: APPL
         LSMinimumSystemVersion: "13.0"
-    entitlements:
-      path: ExifButcher.entitlements
     settings:
       base:
         SWIFT_VERSION: 5.0
