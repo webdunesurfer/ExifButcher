@@ -16,10 +16,12 @@ targets:
               default: Adjust RAWs EXIF
             NSMessage: processFolder
             NSPortName: ExifButcher
+            NSRequiredContext:
+              NSTextContent: FilePath
             NSSendTypes:
+              - public.item
               - public.folder
               - public.directory
-              - public.item
         CFBundleName: ExifButcher
         CFBundleDisplayName: ExifButcher
         CFBundleIdentifier: info.in4net.ExifButcher
