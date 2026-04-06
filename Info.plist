@@ -30,7 +30,7 @@
 			<key>NSMenuItem</key>
 			<dict>
 				<key>default</key>
-				<string>Adjust RAWs EXIF</string>
+				<string>📷 ExifButcher: Adjust RAWs EXIF</string>
 			</dict>
 			<key>NSMessage</key>
 			<string>processFolder</string>
@@ -38,11 +38,12 @@
 			<string>ExifButcher</string>
 			<key>NSRequiredContext</key>
 			<dict>
-				<key>NSTextContent</key>
-				<string>FilePath</string>
+				<key>NSServiceCategory</key>
+				<string>public.item</string>
 			</dict>
-			<key>NSSendTypes</key>
+			<key>NSSendFileTypes</key>
 			<array>
+				<string>public.item</string>
 				<string>public.folder</string>
 				<string>public.directory</string>
 			</array>
