@@ -26,14 +26,16 @@ jobs:
     - name: Build with xcodebuild
       run: xcodebuild -project ExifButcher.xcodeproj -scheme ExifButcher -configuration Release build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
 
-    - name: Archive ExifButcher app
-      run: |
-        mkdir -p Payload
-        cp -r build/Release/ExifButcher.app Payload/
-        zip -r ExifButcher.zip Payload
+    - name: Create macOS Installer (.pkg)
+      run: pkgbuild --component build/Release/ExifButcher.app --install-location /Applications ExifButcher.pkg
+
+    - name: Create Disk Image (.dmg)
+      run: hdiutil create -volname ExifButcher -srcfolder build/Release/ExifButcher.app -ov -format UDZO ExifButcher.dmg
         
-    - name: Upload Build Artifact
+    - name: Upload Installer Artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: ExifButcher-App
-        path: ExifButcher.zip
+        name: ExifButcher-Installers
+        path: |
+          ExifButcher.pkg
+          ExifButcher.dmg
