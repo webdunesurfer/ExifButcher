@@ -1,22 +1,27 @@
 # Installation Instructions
 
-If you are downloading ExifButcher from the GitHub Actions artifacts, the app is **unsigned** (it is not tied to a paid Apple Developer Certificate). As a result, macOS Gatekeeper will aggressively block it.
+ExifButcher is distributed through [GitHub Releases](https://github.com/webdunesurfer/ExifButcher/releases). The app is **ad-hoc signed** but not notarized (there is no paid Apple Developer certificate), so macOS asks you to confirm before it opens it the first time.
 
 ## Step-by-Step Installation
 
-1. **Download** the `ExifButcher-Installers.zip` from the latest GitHub Action run.
-2. **Extract** the `.zip` file. You can choose to use the `.pkg` installer (which automatically places the app in `/Applications`) or mount the `.dmg` and drag the app manually.
-3. Ensure `ExifButcher.app` is placed in your `/Applications` folder. *This is strictly required for the macOS Finder Service (right-click menu) to register successfully.*
+Download the latest release, then pick **one** of these:
 
-## Bypassing macOS Gatekeeper ("App is Damaged" Error)
+- **`.pkg` installer (recommended):** Right-click `ExifButcher-<version>.pkg` → **Open** → **Open**. On macOS 15 and later, if no Open button appears, go to **System Settings > Privacy & Security** and click **Open Anyway**. The installer always places the app in `/Applications`, and apps installed this way are not quarantined, so the app itself opens without further prompts.
+- **`.dmg` disk image:** Open `ExifButcher-<version>.dmg` and drag `ExifButcher.app` onto the `Applications` shortcut. On first launch, macOS will say it cannot verify the developer. Go to **System Settings > Privacy & Security** and click **Open Anyway** (on macOS 14 and earlier, right-click the app → **Open** also works).
 
-Because the app is unsigned, macOS adds a `com.apple.quarantine` extended attribute to the file when downloaded from the internet. When you try to open it, macOS will say the app is **damaged and should be moved to the Trash**.
+The app must be in `/Applications`. *This is strictly required for the macOS Finder Service (right-click menu) to register successfully.*
 
-**To fix this:**
-Open your terminal and remove the quarantine flag using the `xattr` command:
+You can check the download against `SHA256SUMS.txt` from the release:
+```bash
+shasum -a 256 -c SHA256SUMS.txt
+```
+
+## If macOS Still Blocks the App
+
+As a last resort, remove the quarantine flag manually:
 
 ```bash
-xattr -cr /Applications/ExifButcher.app
+xattr -dr com.apple.quarantine /Applications/ExifButcher.app
 ```
 
 ## Initializing the Finder Service

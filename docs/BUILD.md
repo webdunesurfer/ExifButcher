@@ -14,12 +14,8 @@ ExifButcher uses **XcodeGen** to procedurally generate the `.xcodeproj` file. Th
    brew install xcodegen
    ```
 
-2. **Download ExifTool**
-   ExifTool must be bundled manually since it is not checked into the repository to save space.
-   - Download the latest macOS Package from [exiftool.org](https://exiftool.org/).
-   - Extract the `.tar.gz` file.
-   - Rename the extracted folder to exactly `exiftool`.
-   - Move it to the `Resources` directory: `ExifButcher/Resources/exiftool`.
+2. **ExifTool**
+   ExifTool is checked into the repository at `Resources/exiftool` and is copied into the app bundle by a post-compile script. To upgrade it, replace that folder with the contents of the latest release from [exiftool.org](https://exiftool.org/).
 
 3. **Generate the Xcode Project**
    In the root of the repository, run:
@@ -34,13 +30,28 @@ ExifButcher uses **XcodeGen** to procedurally generate the `.xcodeproj` file. Th
    xcodebuild -project ExifButcher.xcodeproj -scheme ExifButcher -configuration Release build SYMROOT=build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
    ```
 
-## CI/CD Pipeline (GitHub Actions)
-The repository includes an automated workflow (`.github/workflows/build.yml`) that triggers on pushes and pull requests to the `main` branch. 
+5. **Build the installers (optional)**
+   ```bash
+   scripts/package.sh 1.2.0          # version, optional build number as 2nd arg
+   ```
+   This builds a universal (arm64 + x86_64) app, ad-hoc signs it, and writes `ExifButcher-<version>.dmg`, `ExifButcher-<version>.pkg` and `SHA256SUMS.txt` to `dist/`.
 
-The pipeline automatically:
-1. Installs XcodeGen.
-2. Generates the Xcode project.
-3. Compiles the Swift application.
-4. Generates a `.pkg` macOS Installer using `pkgbuild`.
-5. Generates a `.dmg` Disk Image using `hdiutil`.
-6. Uploads them as a single zip artifact named `ExifButcher-Installers`.
+## Versioning
+`MARKETING_VERSION` and `CURRENT_PROJECT_VERSION` in `project.yml` are the defaults for local builds. Release builds override them from the git tag (`v1.2.0` → `1.2.0`) and the CI run number.
+
+## CI/CD Pipeline (GitHub Actions)
+Both workflows install XcodeGen and run `scripts/package.sh`.
+
+- **`.github/workflows/build.yml`** runs on pushes and pull requests to `main`. It uploads the installers as a short-lived (14-day) `ExifButcher-test-build` artifact for testing.
+- **`.github/workflows/release.yml`** runs when a `v*` tag is pushed. It publishes a GitHub Release with the `.dmg`, `.pkg` and checksums attached.
+
+To cut a release:
+```bash
+git tag v1.2.0
+git push origin v1.2.0
+```
+
+## Code Signing
+There is no Apple Developer ID, so the app is **ad-hoc signed** (`codesign -s -`) and not notarized. Ad-hoc signing seals the bundle, so Gatekeeper treats it as an app from an unidentified developer instead of reporting it as "damaged". If a Developer ID becomes available, add signing with `--options runtime`, `productsign` for the pkg, and `notarytool` + `stapler` to `scripts/package.sh`.
+
+The `.pkg` is built with `BundleIsRelocatable = false`, so Installer always installs to `/Applications` and never "upgrades" a copy elsewhere on disk (the Finder Service only registers from `/Applications`).

@@ -1,4 +1,4 @@
-name: Build and Release
+name: Build
 
 on:
   push:
@@ -16,28 +16,15 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Set up Homebrew
-      uses: Homebrew/actions/setup-homebrew@main
-
     - name: Install xcodegen
       run: brew install xcodegen
 
-    - name: Generate Xcode Project
-      run: xcodegen generate
+    - name: Build and package
+      run: scripts/package.sh "0.0.${{ github.run_number }}" "${{ github.run_number }}"
 
-    - name: Build with xcodebuild
-      run: xcodebuild -project ExifButcher.xcodeproj -scheme ExifButcher -configuration Release build SYMROOT=build CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO CODE_SIGNING_ALLOWED=NO
-
-    - name: Create macOS Installer (.pkg)
-      run: pkgbuild --component build/Release/ExifButcher.app --install-location /Applications ExifButcher.pkg
-
-    - name: Create Disk Image (.dmg)
-      run: hdiutil create -volname ExifButcher -srcfolder build/Release/ExifButcher.app -ov -format UDZO ExifButcher.dmg
-        
-    - name: Upload Installer Artifacts
+    - name: Upload test build
       uses: actions/upload-artifact@v4
       with:
-        name: ExifButcher-Installers
-        path: |
-          ExifButcher.pkg
-          ExifButcher.dmg
+        name: ExifButcher-test-build
+        path: dist/
+        retention-days: 14

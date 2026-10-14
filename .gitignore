@@ -22,3 +22,6 @@ project.xcworkspace/
 
 # Xcodegen
 ExifButcher.xcodeproj/
+
+# Packaging output
+dist/

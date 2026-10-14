@@ -14,15 +14,12 @@ If you just bought a brand new camera and your preferred RAW converter (like Cap
 - **Zero Configuration:** Bundles its own `exiftool` binary, so you don't need to install any command-line tools or dependencies.
 
 ## Installation
-1. Go to the [Releases/Actions tab](https://github.com/webdunesurfer/ExifButcher/actions) on this repository.
-2. Click on the latest successful "Build and Release" workflow run.
-3. Download the `ExifButcher-Installers` artifact at the bottom of the page.
-4. Extract the zip file and run the `.pkg` installer, or mount the `.dmg` and drag `ExifButcher.app` to your `/Applications` folder.
-5. **Gatekeeper Note:** If macOS says the app is "damaged," this is because it is unsigned. Open Terminal and run:
-   ```bash
-   xattr -cr /Applications/ExifButcher.app
-   ```
-6. Open `ExifButcher.app` from your Applications folder once to register the macOS Service.
+1. Download the latest `.pkg` or `.dmg` from the [Releases page](https://github.com/webdunesurfer/ExifButcher/releases).
+2. **`.pkg`:** right-click it → **Open**, then follow the installer. **`.dmg`:** drag `ExifButcher.app` onto the `Applications` shortcut.
+3. The app is not notarized, so macOS asks you to confirm the first launch. If it is blocked, go to **System Settings > Privacy & Security** and click **Open Anyway**.
+4. Open `ExifButcher.app` from your Applications folder once to register the macOS Service.
+
+See [docs/INSTALLATION.md](docs/INSTALLATION.md) for details and troubleshooting.
 
 ## Usage
 1. Click the ExifButcher (camera) icon in your macOS Menu Bar.
@@ -36,9 +33,10 @@ This app is built using Swift, SwiftUI, and Xcodegen.
 
 1. Clone the repository.
 2. Install [Xcodegen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
-3. Download the macOS package from [ExifTool](https://exiftool.org/), extract it, rename the folder to `exiftool`, and place it in the `Resources` directory.
-4. Run `xcodegen generate` in the root directory.
-5. Open the generated `ExifButcher.xcodeproj` in Xcode and build.
+3. Run `xcodegen generate` in the root directory.
+4. Open the generated `ExifButcher.xcodeproj` in Xcode and build, or run `scripts/package.sh <version>` to build the installers.
+
+ExifTool is bundled in `Resources/exiftool`. See [docs/BUILD.md](docs/BUILD.md) for releases and CI.
 
 ## Credits
 - **Core Engine:** Built on top of the incredible [ExifTool](https://exiftool.org/) by Phil Harvey.
