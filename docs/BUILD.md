@@ -43,7 +43,7 @@ ExifButcher uses **XcodeGen** to procedurally generate the `.xcodeproj` file. Th
 Both workflows install XcodeGen and run `scripts/package.sh`.
 
 - **`.github/workflows/build.yml`** runs on pushes and pull requests to `main`. It uploads the installers as a short-lived (14-day) `ExifButcher-test-build` artifact for testing.
-- **`.github/workflows/release.yml`** runs when a `v*` tag is pushed. It publishes a GitHub Release with the `.dmg`, `.pkg` and checksums attached.
+- **`.github/workflows/release.yml`** runs when a `v*` tag is pushed. It publishes a GitHub Release with the `.dmg`, `.pkg` and checksums attached, then updates `version` and `sha256` in the Homebrew cask (`Casks/exifbutcher.rb`) and pushes that change to `main`.
 
 To cut a release:
 ```bash

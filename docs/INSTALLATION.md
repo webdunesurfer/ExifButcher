@@ -2,7 +2,16 @@
 
 ExifButcher is distributed through [GitHub Releases](https://github.com/webdunesurfer/ExifButcher/releases). The app is **ad-hoc signed** but not notarized (there is no paid Apple Developer certificate), so macOS asks you to confirm before it opens it the first time.
 
-## Step-by-Step Installation
+## Homebrew (recommended)
+
+```bash
+brew tap webdunesurfer/exifbutcher https://github.com/webdunesurfer/ExifButcher
+brew install --cask exifbutcher
+```
+
+The cask installs the app into `/Applications` and clears the download quarantine, so there is no Gatekeeper prompt. Continue with [Initializing the Finder Service](#initializing-the-finder-service). To update: `brew upgrade --cask exifbutcher`. To remove: `brew uninstall --cask exifbutcher` (add `--zap` to delete settings too).
+
+## Manual Installation
 
 Download the latest release, then pick **one** of these:
 

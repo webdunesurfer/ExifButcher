@@ -14,6 +14,15 @@ If you just bought a brand new camera and your preferred RAW converter (like Cap
 - **Zero Configuration:** Bundles its own `exiftool` binary, so you don't need to install any command-line tools or dependencies.
 
 ## Installation
+
+### Homebrew (recommended)
+```bash
+brew tap webdunesurfer/exifbutcher https://github.com/webdunesurfer/ExifButcher
+brew install --cask exifbutcher
+```
+Then open ExifButcher once from `/Applications` to register the Finder action. Update later with `brew upgrade --cask exifbutcher`.
+
+### Manual
 1. Download the latest `.pkg` or `.dmg` from the [Releases page](https://github.com/webdunesurfer/ExifButcher/releases).
 2. **`.pkg`:** right-click it → **Open**, then follow the installer. **`.dmg`:** drag `ExifButcher.app` onto the `Applications` shortcut.
 3. The app is not notarized, so macOS asks you to confirm the first launch. If it is blocked, go to **System Settings > Privacy & Security** and click **Open Anyway**.

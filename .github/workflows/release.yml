@@ -30,3 +30,22 @@ jobs:
         gh release create "$GITHUB_REF_NAME" dist/* \
           --title "ExifButcher ${GITHUB_REF_NAME#v}" \
           --generate-notes
+
+    - name: Update Homebrew cask
+      run: |
+        VERSION="${GITHUB_REF_NAME#v}"
+        SHA256=$(shasum -a 256 "dist/ExifButcher-$VERSION.dmg" | cut -d' ' -f1)
+        git fetch origin main:refs/remotes/origin/main
+        git checkout -B main origin/main
+        sed -i '' -E \
+          -e "s/^  version \".*\"/  version \"$VERSION\"/" \
+          -e "s/^  sha256 \".*\"/  sha256 \"$SHA256\"/" \
+          Casks/exifbutcher.rb
+        if git diff --quiet; then
+          echo "Cask already up to date"
+          exit 0
+        fi
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git commit -am "Update Homebrew cask to $VERSION"
+        git push origin main
