@@ -17,8 +17,7 @@ If you just bought a brand new camera and your preferred RAW converter (like Cap
 
 ### Homebrew (recommended)
 ```bash
-brew tap webdunesurfer/exifbutcher https://github.com/webdunesurfer/ExifButcher
-brew install --cask exifbutcher
+brew install --cask webdunesurfer/tap/exifbutcher
 ```
 Then open ExifButcher once from `/Applications` to register the Finder action. Update later with `brew upgrade --cask exifbutcher`.
 

@@ -5,8 +5,7 @@ ExifButcher is distributed through [GitHub Releases](https://github.com/webdunes
 ## Homebrew (recommended)
 
 ```bash
-brew tap webdunesurfer/exifbutcher https://github.com/webdunesurfer/ExifButcher
-brew install --cask exifbutcher
+brew install --cask webdunesurfer/tap/exifbutcher
 ```
 
 The cask installs the app into `/Applications` and clears the download quarantine, so there is no Gatekeeper prompt. Continue with [Initializing the Finder Service](#initializing-the-finder-service). To update: `brew upgrade --cask exifbutcher`. To remove: `brew uninstall --cask exifbutcher` (add `--zap` to delete settings too).

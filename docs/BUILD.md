@@ -43,7 +43,7 @@ ExifButcher uses **XcodeGen** to procedurally generate the `.xcodeproj` file. Th
 Both workflows install XcodeGen and run `scripts/package.sh`.
 
 - **`.github/workflows/build.yml`** runs on pushes and pull requests to `main`. It uploads the installers as a short-lived (14-day) `ExifButcher-test-build` artifact for testing.
-- **`.github/workflows/release.yml`** runs when a `v*` tag is pushed. It publishes a GitHub Release with the `.dmg`, `.pkg` and checksums attached, then updates `version` and `sha256` in the Homebrew cask (`Casks/exifbutcher.rb`) and pushes that change to `main`.
+- **`.github/workflows/release.yml`** runs when a `v*` tag is pushed. It publishes a GitHub Release with the `.dmg`, `.pkg` and checksums attached, then updates `version` and `sha256` in the Homebrew cask in [webdunesurfer/homebrew-tap](https://github.com/webdunesurfer/homebrew-tap) (`Casks/exifbutcher.rb`). This needs the `HOMEBREW_TAP_TOKEN` repository secret: a fine-grained personal access token with **Contents: Read and write** on `homebrew-tap` only. When the token expires, create a new one and replace the secret.
 
 To cut a release:
 ```bash

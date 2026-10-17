@@ -31,12 +31,15 @@ jobs:
           --title "ExifButcher ${GITHUB_REF_NAME#v}" \
           --generate-notes
 
-    - name: Update Homebrew cask
+    - name: Update Homebrew tap
+      env:
+        TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
       run: |
         VERSION="${GITHUB_REF_NAME#v}"
         SHA256=$(shasum -a 256 "dist/ExifButcher-$VERSION.dmg" | cut -d' ' -f1)
-        git fetch origin main:refs/remotes/origin/main
-        git checkout -B main origin/main
+        TAP="$RUNNER_TEMP/homebrew-tap"
+        git clone "https://x-access-token:${TAP_TOKEN}@github.com/webdunesurfer/homebrew-tap.git" "$TAP"
+        cd "$TAP"
         sed -i '' -E \
           -e "s/^  version \".*\"/  version \"$VERSION\"/" \
           -e "s/^  sha256 \".*\"/  sha256 \"$SHA256\"/" \
@@ -47,5 +50,5 @@ jobs:
         fi
         git config user.name "github-actions[bot]"
         git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-        git commit -am "Update Homebrew cask to $VERSION"
+        git commit -am "exifbutcher $VERSION"
         git push origin main
