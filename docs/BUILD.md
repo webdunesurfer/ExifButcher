@@ -43,13 +43,26 @@ ExifButcher uses **XcodeGen** to procedurally generate the `.xcodeproj` file. Th
 Both workflows install XcodeGen and run `scripts/package.sh`.
 
 - **`.github/workflows/build.yml`** runs on pushes and pull requests to `main`. It uploads the installers as a short-lived (14-day) `ExifButcher-test-build` artifact for testing.
-- **`.github/workflows/release.yml`** runs when a `v*` tag is pushed. It publishes a GitHub Release with the `.dmg`, `.pkg` and checksums attached, then updates `version` and `sha256` in the Homebrew cask in [webdunesurfer/homebrew-tap](https://github.com/webdunesurfer/homebrew-tap) (`Casks/exifbutcher.rb`). This needs the `HOMEBREW_TAP_TOKEN` repository secret: a fine-grained personal access token with **Contents: Read and write** on `homebrew-tap` only. When the token expires, create a new one and replace the secret.
+- **`.github/workflows/release.yml`** runs when a `v*` tag is pushed. It publishes a GitHub Release with the `.dmg`, `.pkg` and checksums attached, then updates `version` and `sha256` in the Homebrew cask in [webdunesurfer/homebrew-tap](https://github.com/webdunesurfer/homebrew-tap) (`Casks/exifbutcher.rb`). See [Homebrew Tap](#homebrew-tap) below.
 
 To cut a release:
 ```bash
 git tag v1.2.0
 git push origin v1.2.0
 ```
+
+## Homebrew Tap
+The cask lives in a separate repository, [webdunesurfer/homebrew-tap](https://github.com/webdunesurfer/homebrew-tap), at `Casks/exifbutcher.rb`. Users install it with `brew install --cask webdunesurfer/tap/exifbutcher`.
+
+For each `v*` tag, `release.yml` sets the cask's `version` and `sha256` from the new `.dmg` and pushes the change to the tap as `github-actions[bot]`. To make other changes to the cask, such as its description or caveats, edit it directly in the tap repo, and run `brew style` and `brew audit --cask --online webdunesurfer/tap/exifbutcher` before pushing.
+
+### `HOMEBREW_TAP_TOKEN` secret
+The workflow pushes to the tap with a fine-grained personal access token stored as the `HOMEBREW_TAP_TOKEN` Actions secret in this repository. The token is scoped to `webdunesurfer/homebrew-tap` only, with **Contents: Read and write**.
+
+Tokens expire. When the token expires, releases still publish, but the **Update Homebrew tap** step fails. To renew it:
+1. Open [github.com/settings/personal-access-tokens](https://github.com/settings/personal-access-tokens), select the token and click **Regenerate token**.
+2. In this repository, go to **Settings > Secrets and variables > Actions**, edit `HOMEBREW_TAP_TOKEN` and paste the new value.
+3. If a release missed its cask update, update `version` and `sha256` in the tap's `Casks/exifbutcher.rb` by hand, using the `.dmg` checksum from that release's `SHA256SUMS.txt`. Re-running the workflow won't help, because it fails at the publish step once the Release already exists.
 
 ## Code Signing
 There is no Apple Developer ID, so the app is **ad-hoc signed** (`codesign -s -`) and not notarized. Ad-hoc signing seals the bundle, so Gatekeeper treats it as an app from an unidentified developer instead of reporting it as "damaged". If a Developer ID becomes available, add signing with `--options runtime`, `productsign` for the pkg, and `notarytool` + `stapler` to `scripts/package.sh`.

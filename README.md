@@ -16,10 +16,16 @@ If you just bought a brand new camera and your preferred RAW converter (like Cap
 ## Installation
 
 ### Homebrew (recommended)
+With [Homebrew](https://brew.sh) installed, run:
 ```bash
 brew install --cask webdunesurfer/tap/exifbutcher
 ```
-Then open ExifButcher once from `/Applications` to register the Finder action. Update later with `brew upgrade --cask exifbutcher`.
+Then open ExifButcher once from `/Applications` to register the Finder action.
+
+- Update: `brew upgrade --cask exifbutcher`
+- Uninstall: `brew uninstall --cask exifbutcher`
+
+If you installed ExifButcher manually before, delete `/Applications/ExifButcher.app` first. Homebrew won't overwrite an app it didn't install.
 
 ### Manual
 1. Download the latest `.pkg` or `.dmg` from the [Releases page](https://github.com/webdunesurfer/ExifButcher/releases).

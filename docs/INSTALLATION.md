@@ -1,14 +1,34 @@
 # Installation Instructions
 
-ExifButcher is distributed through [GitHub Releases](https://github.com/webdunesurfer/ExifButcher/releases). The app is **ad-hoc signed** but not notarized (there is no paid Apple Developer certificate), so macOS asks you to confirm before it opens it the first time.
+ExifButcher is distributed through [Homebrew](#homebrew-recommended) and [GitHub Releases](https://github.com/webdunesurfer/ExifButcher/releases). The app is **ad-hoc signed** but not notarized (there is no paid Apple Developer certificate), so macOS asks you to confirm before it opens it the first time.
 
 ## Homebrew (recommended)
+
+Requires [Homebrew](https://brew.sh). Install ExifButcher with:
 
 ```bash
 brew install --cask webdunesurfer/tap/exifbutcher
 ```
 
-The cask installs the app into `/Applications` and clears the download quarantine, so there is no Gatekeeper prompt. Continue with [Initializing the Finder Service](#initializing-the-finder-service). To update: `brew upgrade --cask exifbutcher`. To remove: `brew uninstall --cask exifbutcher` (add `--zap` to delete settings too).
+This adds the [webdunesurfer/tap](https://github.com/webdunesurfer/homebrew-tap) tap and installs the app into `/Applications`. The cask also clears the download quarantine, so macOS shows no Gatekeeper prompt. Next, continue with [Initializing the Finder Service](#initializing-the-finder-service).
+
+| Task | Command |
+|---|---|
+| Update to the latest release | `brew upgrade --cask exifbutcher` |
+| Show the installed and latest versions | `brew info --cask exifbutcher` |
+| Uninstall | `brew uninstall --cask exifbutcher` |
+| Uninstall and delete saved settings | `brew uninstall --cask --zap exifbutcher` |
+
+### Switching from a manual install
+
+Homebrew will not overwrite an app it did not install. If you previously installed ExifButcher from a `.dmg` or `.pkg`, quit it from the menu bar and remove it first. Your camera model settings are kept.
+
+```bash
+rm -rf /Applications/ExifButcher.app
+brew install --cask webdunesurfer/tap/exifbutcher
+```
+
+Alternatively, `brew install --cask --force webdunesurfer/tap/exifbutcher` replaces the existing copy.
 
 ## Manual Installation
 
@@ -50,3 +70,9 @@ If the "**📷 ExifButcher: Adjust RAWs EXIF**" option does not appear when you 
    ```bash
    /System/Library/CoreServices/pbs -flush
    ```
+
+## Troubleshooting Homebrew
+
+- **`It seems there is already an App at '/Applications/ExifButcher.app'`**: see [Switching from a manual install](#switching-from-a-manual-install).
+- **`brew upgrade` doesn't find a new version**: refresh Homebrew's copy of the tap with `brew update`, then try again.
+- **`Cask 'webdunesurfer/tap/exifbutcher' is unavailable`** (from `brew info` and similar commands): add the tap first with `brew tap webdunesurfer/tap`. `brew install` adds it automatically.
