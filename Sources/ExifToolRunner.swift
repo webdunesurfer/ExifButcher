@@ -53,9 +53,11 @@ class ExifToolRunner {
         
         do {
             try task.run()
-            task.waitUntilExit()
-            
+            // Drain the pipe before waiting: if output exceeds the pipe buffer
+            // (~64 KB, e.g. many per-file warnings), exiftool blocks on write
+            // and waitUntilExit() would never return.
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
+            task.waitUntilExit()
             let output = String(data: data, encoding: .utf8) ?? ""
             
             if task.terminationStatus == 0 {
